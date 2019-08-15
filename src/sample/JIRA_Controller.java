@@ -1,10 +1,7 @@
 package sample;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.util.Base64;
 import java.util.HashMap;
 
