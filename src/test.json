@@ -1,0 +1,112 @@
+{
+  "entities": [
+    {
+      "Fields": [
+        {
+          "Name": "name",
+          "values": [
+            {
+              "value": "Тестирование IDM на стенде СГК с конечными пользователями"
+            }
+          ]
+        },
+        {
+          "Name": "parent-id",
+          "values": [
+            {
+              "value": "1206"
+            }
+          ]
+        },
+        {
+          "Name": "description",
+          "values": [
+            {
+              "value": "null"
+            }
+          ]
+        },
+        {
+          "Name": "subtype-id",
+          "values": [
+            {
+              "value": "MANUAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Fields": [
+        {
+          "Name": "name",
+          "values": [
+            {
+              "value": "Не добавляется почта отправителя при отправке ответа от прокуратуры"
+            }
+          ]
+        },
+        {
+          "Name": "parent-id",
+          "values": [
+            {
+              "value": "1206"
+            }
+          ]
+        },
+        {
+          "Name": "description",
+          "values": [
+            {
+              "value": "*Предусловие:*\r\n*Почтовый сервер реализован в виде почтового ящика (test.imap.ee@gmail.com)*\r\n+Логин:+ test.imap.ee@gmail.com\r\n+Пароль:+ voskhod123\r\n\r\n*Данные почтового ящика отправителя обращения:*\r\n+Логин:+ testUserCrf282@yandex.ru\r\n+Пароль:+ Voskhod123\r\n\r\n*Данные почтового ящика Ген.прокуратуры:*\r\n+Логин:+ testProCrf282@yandex.ru\r\n+Пароль:+ Voskhod123\r\n\r\n*Шаги воспроизведения:*\r\n# Отправить письмо с обращением из почты прокуратуры на почтовый сервер и на почту отправителя.\r\n\r\n*Ожидаемый результат:*\r\nОтвет от genprocuracy@gmail.com приходит и на почтовый сервер, и на почту отправителя.\r\n\r\n*Фактический результат:*\r\nОтвет от genprocuracy@gmail.com приходит +только+ на почтовый сервер."
+            }
+          ]
+        },
+        {
+          "Name": "subtype-id",
+          "values": [
+            {
+              "value": "MANUAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Fields": [
+        {
+          "Name": "name",
+          "values": [
+            {
+              "value": "Подготовка тестовой модели по интеграции портала с idm-service и АИК Надзор"
+            }
+          ]
+        },
+        {
+          "Name": "parent-id",
+          "values": [
+            {
+              "value": "1206"
+            }
+          ]
+        },
+        {
+          "Name": "description",
+          "values": [
+            {
+              "value": "null"
+            }
+          ]
+        },
+        {
+          "Name": "subtype-id",
+          "values": [
+            {
+              "value": "MANUAL"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
