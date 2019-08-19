@@ -32,13 +32,6 @@ public class JIRA_Controller {
         return connection;
     }
 
-    public static void main(String[] args) throws IOException {
-        SSLUtilities.trustAllHttpsCertificates();
-        JIRA_Controller jira_controller = new JIRA_Controller();
-        jira_controller.setAuthData("d.lulava", "PBL520");
-        jira_controller.getIssuesJQL("project = EPP_EX_R19 AND status = Open AND assignee in (currentUser())");
-    }
-
     public String getIssuesJQL(String filterJQL) throws IOException {
         HttpURLConnection connection = createConnection("POST", "/rest/api/2/search");
         connection.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString((login+":"+password).getBytes()));

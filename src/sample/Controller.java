@@ -34,6 +34,8 @@ public class Controller {
 
     @FXML public void on_dJtA_executeButton() throws IOException {
         jiraController.setAuthData(loginJIRA.getText(), passJIRA.getText());
+        almController.signIn(loginALM.getText(), passALM.getText());
+        String parentID = almController.createFolder(dJtA_folderALM.getText(), "0");
         JSONArray jsonIssues = new JSONObject(jiraController.getIssuesJQL(dJtA_filterDefectJIRA.getText())).getJSONArray("issues");
         JSONObject jsonTests = new JSONObject();
         jsonTests.put("entities", new JSONArray());
@@ -46,7 +48,7 @@ public class Controller {
             name.put("values", new JSONArray().put(new JSONObject().put("value", testName)));
             LinkedHashMap <String, Object> parent_id = new LinkedHashMap<>();
             parent_id.put("Name", "parent-id");
-            parent_id.put("values", new JSONArray().put(new JSONObject().put("value", "1206")));
+            parent_id.put("values", new JSONArray().put(new JSONObject().put("value", parentID)));
             LinkedHashMap <String, Object> description = new LinkedHashMap<>();
             description.put("Name", "description");
             description.put("values", new JSONArray().put(new JSONObject().put("value", testDescription)));
@@ -63,8 +65,8 @@ public class Controller {
         }
         System.out.println(jsonTests.toString());
         System.out.println("hi");
-        almController.signIn(loginALM.getText(), passALM.getText());
-        almController.createTestS(jsonTests.toString());
+        almController.setProjectName(dJtA_projectALM.getText());
+        almController.createTestS(jsonTests.toString(), dJtA_folderALM.getText());
     }
 
     @FXML void initialize() throws UnsupportedEncodingException {

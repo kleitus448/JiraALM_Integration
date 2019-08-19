@@ -1,5 +1,8 @@
 package sample;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,7 +16,6 @@ public class ALM_Controller {
 
     public ALM_Controller() throws UnsupportedEncodingException {
         this.cookies = new StringBuilder();
-        this.projectName = URLEncoder.encode("Реестры", "UTF-8");
         this.hostName = "http://10.215.0.118:8080";
     }
 
@@ -87,7 +89,7 @@ public class ALM_Controller {
         System.out.println(connection.getResponseMessage()+"\n");
     }
 
-    public void createTestS(String json) throws IOException {
+    public void createTestS(String json, String folderName) throws IOException {
         System.out.println("createTestS_Request:");
         HttpURLConnection connection = createConnection("POST", "/qcbin/rest/domains/DEFAULT/projects/"+projectName+"/tests");
         connection.setRequestProperty("Content-Type", "application/json;type=collection");
@@ -99,7 +101,7 @@ public class ALM_Controller {
         System.out.println(connection.getResponseMessage()+"\n");
     }
 
-    private void createFolder(String folder, String parentID) throws IOException {
+    public String createFolder(String folder, String parentID) throws IOException {
         HttpURLConnection connection = createConnection("POST", "/qcbin/rest/domains/DEFAULT/projects/"+projectName+"/test-folders");
         connection.setRequestProperty("Cookie", cookies.toString());
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
@@ -125,5 +127,28 @@ public class ALM_Controller {
                 "    ]\n" +
                 "}");
         writer.close();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String temp = ""; StringBuilder response = new StringBuilder();
+        while ((temp = reader.readLine()) != null) {
+            response.append(temp);
+        }
+        JSONObject responseJSON = new JSONObject(response.toString());
+        //responseJSON.getJSONArray("Fields").getJSONObject()
+        return "0";
     }
+
+//    private void findProjectID() throws IOException {
+//        HttpURLConnection connection = createConnection("GET", "/qcbin/rest/domains/DEFAULT/projects/"+projectName+"/test-folders");
+//        connection.setRequestProperty("Cookie", cookies.toString());
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//        String temp = ""; StringBuilder response = new StringBuilder();
+//        while ((temp = reader.readLine()) != null) {
+//            response.append(temp);
+//        }
+//        JSONArray folders = new JSONObject(response.toString()).getJSONArray("entities");
+//        for (int i = 0; i < folders.length(); i++) {
+//            folders.getJSONObject(i).getJSONArray("Fields").getJSONObject()
+//        }
+//        reader.close();
+//    }
 }
