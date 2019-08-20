@@ -32,7 +32,7 @@ public class ALM_Controller {
         connection.setRequestMethod(reqMethod);
         connection.setDoOutput(true);
         connection.setDoInput(true);
-        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Connection", "keep-alive");
         connection.setRequestProperty("Accept-Encoding", "gzip, deflate");
@@ -96,7 +96,7 @@ public class ALM_Controller {
     public void createTestS(String json, String folderName) throws IOException {
         System.out.println("createTestS_Request:");
         HttpURLConnection connection = createConnection("POST", "/qcbin/rest/domains/DEFAULT/projects/"+projectName+"/tests");
-        connection.setRequestProperty("Content-Type", "application/json;type=collection");
+        connection.setRequestProperty("Content-Type", connection.getRequestProperty("Content-Type")+";type=collection");
         connection.setRequestProperty("Cookie", cookies.toString());
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
         writer.write(json);
@@ -123,14 +123,8 @@ public class ALM_Controller {
         writer.close();
         System.out.println(folderJSON.toString());
         System.out.println(connection.getResponseMessage());
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String temp = ""; StringBuilder response = new StringBuilder();
-        while ((temp = reader.readLine()) != null) {
-            response.append(temp);
-        }
-        System.out.println(response);
-        reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        temp = ""; response = new StringBuilder();
         while ((temp = reader.readLine()) != null) {
             response.append(temp);
         }
