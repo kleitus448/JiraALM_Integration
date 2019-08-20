@@ -2,6 +2,8 @@ package sample;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -26,7 +28,7 @@ public class JIRA_Controller {
         connection.setRequestMethod(reqMethod);
         connection.setDoOutput(true);
         connection.setDoInput(true);
-        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Connection", "keep-alive");
         return connection;
@@ -37,13 +39,20 @@ public class JIRA_Controller {
         connection.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString((login+":"+password).getBytes()));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
         writer.write("{\n" +
-                "    \"jql\": \""+filterJQL+"\",\n" +
+                "    \"jql\": \""+ filterJQL.replace("\"","\\\"") +"\",\n" +
                 "    \"fields\": [\n" +
                 "        \"summary\",\n" +
                 "        \"description\"\n" +
                 "    ]\n" +
                 "}");
         writer.close();
+        System.out.println("{\n" +
+                "    \"jql\": \"" + new String(filterJQL.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8) + "\",\n" +
+                "    \"fields\": [\n" +
+                "        \"summary\",\n" +
+                "        \"description\"\n" +
+                "    ]\n" +
+                "}");
         HashMap<String, String> issues = new HashMap<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String temp = ""; StringBuilder response = new StringBuilder();
@@ -53,4 +62,11 @@ public class JIRA_Controller {
         reader.close();
         return response.toString();
     }
+
+//    public static void main(String[] args) throws IOException {
+//        SSLUtilities.trustAllHttpsCertificates();
+//        JIRA_Controller jiraController = new JIRA_Controller();
+//        jiraController.setAuthData("d.lulava", "PBL520");
+//        System.out.println(jiraController.getIssuesJQL("project = EPP_EX_R19 AND affectedVersion = \"релиз 11\" AND reporter in (v.rusakova)"));
+//    }
 }
