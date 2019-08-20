@@ -2,12 +2,16 @@ package sample;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import sun.nio.cs.UnicodeEncoder;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 
 public class ALM_Controller {
     private StringBuilder cookies;
@@ -19,8 +23,8 @@ public class ALM_Controller {
         this.hostName = "http://10.215.0.118:8080";
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setProjectName(String projectName) throws UnsupportedEncodingException {
+        this.projectName = URLEncoder.encode(projectName, "utf-8");
     }
 
     private HttpURLConnection createConnection(String reqMethod, String url) throws IOException {
@@ -105,36 +109,38 @@ public class ALM_Controller {
         HttpURLConnection connection = createConnection("POST", "/qcbin/rest/domains/DEFAULT/projects/"+projectName+"/test-folders");
         connection.setRequestProperty("Cookie", cookies.toString());
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-        writer.write("{\n" +
-                "    \"Fields\": [\n" +
-                "        {\n" +
-                "            \"Name\": \"name\",\n" +
-                "            \"values\": [\n" +
-                "                {\n" +
-                "                    \"value\": \"" + folder + "\"\n" +
-                "                }\n" +
-                "            ]\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"Name\": \"parent-id\",\n" +
-                "            \"values\": [\n" +
-                "                {\n" +
-                "                    \"value\": \"" + parentID + "\"\n" +
-                "                }\n" +
-                "            ]\n" +
-                "        }\n" +
-                "       \n" +
-                "    ]\n" +
-                "}");
+        LinkedHashMap<String, Object> name = new LinkedHashMap<>();
+        name.put("Name", "name");
+        name.put("values", new JSONArray().put(new JSONObject().put("value", folder)));
+        LinkedHashMap <String, Object> parent_id = new LinkedHashMap<>();
+        parent_id.put("Name", "parent-id");
+        parent_id.put("values", new JSONArray().put(new JSONObject().put("value", parentID)));
+        JSONObject folderJSON = new JSONObject(Collections.singletonMap(
+                "Fields", new JSONArray()
+                        .put(new JSONObject(name))
+                        .put(new JSONObject(parent_id))));
+        writer.write(folderJSON.toString());
         writer.close();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        System.out.println(folderJSON.toString());
+        System.out.println(connection.getResponseMessage());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
         String temp = ""; StringBuilder response = new StringBuilder();
         while ((temp = reader.readLine()) != null) {
             response.append(temp);
         }
-        JSONObject responseJSON = new JSONObject(response.toString());
-        //responseJSON.getJSONArray("Fields").getJSONObject()
-        return "0";
+        System.out.println(response);
+        reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        temp = ""; response = new StringBuilder();
+        while ((temp = reader.readLine()) != null) {
+            response.append(temp);
+        }
+        JSONArray fieldsJSON = new JSONObject(response.toString()).getJSONArray("Fields");
+        for (int i = 0; i < fieldsJSON.length(); i++) {
+            JSONObject field = fieldsJSON.getJSONObject(i);
+            if (field.get("Name").toString().equals("id"))
+                return field.getJSONArray("values").getJSONObject(0).get("value").toString();
+        }
+        return "2";
     }
 
 //    private void findProjectID() throws IOException {

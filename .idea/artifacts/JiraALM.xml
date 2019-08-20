@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JiraALM">
+    <output-path>$PROJECT_DIR$/out/artifacts/JiraALM</output-path>
+    <root id="archive" name="JiraALM.jar">
+      <element id="module-output" name="JiraALM" />
+      <element id="library" level="project" name="json-20190722" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

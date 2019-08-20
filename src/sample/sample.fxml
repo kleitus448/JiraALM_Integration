@@ -66,6 +66,11 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <Label fx:id="dJtA_statusLabel" layoutX="85.0" layoutY="129.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
       </content>
